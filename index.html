@@ -59,6 +59,7 @@
         border: none;
         cursor: pointer;
       }
+
       .btn:hover {
         background-color: black;
       }
@@ -83,6 +84,41 @@
 
       #fileLabel:hover {
         background-color: black;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 10px;
+        background: #000; /* black background */
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: 0.2s;
+        transition: opacity 0.2s;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #800000; /* maroon thumb */
+        cursor: pointer;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #800000; /* maroon thumb */
+        cursor: pointer;
+      }
+
+      input[type="range"]::-webkit-slider-thumb:hover {
+        background: #8b0000; /* slightly lighter maroon on hover */
+      }
+
+      input[type="range"]:hover {
+        opacity: 1;
       }
 
       /* Media Queries */
@@ -118,6 +154,8 @@
       <label id="fileLabel" for="fileInput">Load an image</label>
       <input type="file" id="fileInput" accept="image/*" />
       <button id="undoButton" class="btn">Undo</button>
+      <input type="range" id="penSizeRange" min="1" max="20" value="2" />
+      <input type="color" id="backgroundColorPicker" value="#ffffff" />
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -131,6 +169,10 @@
         const saveButton = document.getElementById("saveButton");
         const fileInput = document.getElementById("fileInput");
         const undoButton = document.getElementById("undoButton");
+        const penSizeRange = document.getElementById("penSizeRange");
+        const backgroundColorPicker = document.getElementById(
+          "backgroundColorPicker"
+        );
 
         canvas.width = board.offsetWidth;
         canvas.height = board.offsetHeight;
@@ -144,22 +186,20 @@
 
         function draw(e) {
           if (!isDrawing) return;
+          const rect = canvas.getBoundingClientRect();
+          const offsetX = e.clientX - rect.left;
+          const offsetY = e.clientY - rect.top;
           const color = isErasing ? "#ffffff" : colorPicker.value;
           context.strokeStyle = color;
           context.lineJoin = "round";
           context.lineCap = "round";
-          context.lineWidth = isErasing ? 20 : 2;
+          context.lineWidth = isErasing ? 20 : penSizeRange.value;
           context.beginPath();
           context.moveTo(lastX, lastY);
-          context.lineTo(
-            e.offsetX || e.touches[0].clientX,
-            e.offsetY || e.touches[0].clientY
-          );
+          context.lineTo(offsetX, offsetY);
           context.stroke();
-          [lastX, lastY] = [
-            e.offsetX || e.touches[0].clientX,
-            e.offsetY || e.touches[0].clientY,
-          ];
+          lastX = offsetX;
+          lastY = offsetY;
         }
 
         canvas.addEventListener("mousedown", (e) => {
@@ -169,11 +209,18 @@
 
         canvas.addEventListener("touchstart", (e) => {
           isDrawing = true;
-          [lastX, lastY] = [e.touches[0].clientX, e.touches[0].clientY];
+          const touch = e.touches[0];
+          [lastX, lastY] = [
+            touch.pageX - canvas.offsetLeft,
+            touch.pageY - canvas.offsetTop,
+          ];
         });
 
         canvas.addEventListener("mousemove", draw);
-        canvas.addEventListener("touchmove", draw);
+        canvas.addEventListener("touchmove", (e) => {
+          e.preventDefault(); // Prevent scrolling
+          draw(e.touches[0]);
+        });
 
         canvas.addEventListener("mouseup", () => {
           isDrawing = false;
@@ -207,10 +254,22 @@
         });
 
         saveButton.addEventListener("click", () => {
-          const image = canvas.toDataURL("image/png");
+          // Save the current canvas state
+          const savedBackgroundColor = canvas.style.backgroundColor;
+
+          // Set the background color to the selected color
+          canvas.style.backgroundColor = backgroundColorPicker.value;
+
+          // Create an image with the background color
+          const imageData = canvas.toDataURL();
+
+          // Restore the previous background color
+          canvas.style.backgroundColor = savedBackgroundColor;
+
+          // Create a link to download the image
           const link = document.createElement("a");
           link.download = "virtual_board.png";
-          link.href = image;
+          link.href = imageData;
           link.click();
         });
 
@@ -254,6 +313,18 @@
             history.pop();
           }
         }
+
+        penSizeRange.addEventListener("input", () => {
+          updatePenSize(penSizeRange.value);
+        });
+
+        function updatePenSize(size) {
+          context.lineWidth = size;
+        }
+
+        backgroundColorPicker.addEventListener("input", () => {
+          canvas.style.backgroundColor = backgroundColorPicker.value;
+        });
       });
     </script>
   </body>
