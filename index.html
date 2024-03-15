@@ -33,21 +33,21 @@
       }
 
       #board {
-        width: 80%; /* Adjusted width */
-        max-width: 800px; /* Added max-width */
-        height: 60vh; /* Adjusted height */
+        width: 80%;
+        max-width: 800px;
+        height: 60vh;
         border: 2px solid black;
         position: relative;
         margin: 0 auto;
-        margin-top: 5vh; /* Adjusted margin-top */
+        margin-top: 5vh;
       }
 
       #board canvas {
         cursor: crosshair;
         display: block;
-        margin: 0 auto; /* Center canvas horizontally */
-        width: 100%; /* Added width */
-        height: 100%; /* Added height */
+        margin: 0 auto;
+        width: 100%;
+        height: 100%;
       }
 
       .btn {
@@ -60,6 +60,28 @@
         cursor: pointer;
       }
       .btn:hover {
+        background-color: black;
+      }
+
+      /* Style for file input */
+      #fileInput {
+        opacity: 0;
+        width: 0.1px;
+        height: 0.1px;
+        position: absolute;
+        z-index: -1;
+      }
+
+      #fileLabel {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: maroon;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      #fileLabel:hover {
         background-color: black;
       }
 
@@ -93,6 +115,8 @@
       <button id="eraserButton" class="btn">Eraser</button>
       <button id="penButton" class="btn">Pen</button>
       <button id="saveButton" class="btn">Save</button>
+      <label id="fileLabel" for="fileInput">Load an image</label>
+      <input type="file" id="fileInput" accept="image/*" />
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -104,6 +128,7 @@
         const eraserButton = document.getElementById("eraserButton");
         const penButton = document.getElementById("penButton");
         const saveButton = document.getElementById("saveButton");
+        const fileInput = document.getElementById("fileInput");
 
         canvas.width = board.offsetWidth;
         canvas.height = board.offsetHeight;
@@ -174,6 +199,19 @@
           link.download = "virtual_board.png";
           link.href = image;
           link.click();
+        });
+
+        fileInput.addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            const img = new Image();
+            img.onload = function () {
+              context.drawImage(img, 0, 0, canvas.width, canvas.height);
+            };
+            img.src = event.target.result;
+          };
+          reader.readAsDataURL(file);
         });
       });
     </script>
