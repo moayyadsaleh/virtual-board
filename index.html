@@ -180,7 +180,12 @@
         title="Load Image - Click to load an image onto the canvas"
         >Load an image</label
       >
-      <input type="file" id="fileInput" accept="image/*" />
+      <input
+        type="file"
+        id="fileInput"
+        accept="image/*"
+        title="Image Input - Choose an image to load onto the canvas"
+      />
       <button
         id="undoButton"
         class="btn"
@@ -188,8 +193,20 @@
       >
         Undo
       </button>
-      <input type="range" id="penSizeRange" min="1" max="20" value="2" />
-      <input type="color" id="backgroundColorPicker" value="#ffffff" />
+      <input
+        type="range"
+        id="penSizeRange"
+        min="1"
+        max="20"
+        value="2"
+        title="Pen Size Range - Adjust the size of your pen"
+      />
+      <input
+        type="color"
+        id="backgroundColorPicker"
+        value="#ffffff"
+        title="Background Color Picker - Choose the canvas background color"
+      />
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
