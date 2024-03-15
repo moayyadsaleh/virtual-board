@@ -145,14 +145,49 @@
     </div>
     <div id="board">
       <canvas id="canvas"></canvas>
-      <button id="clearButton" class="btn">Clear All</button>
+      <button
+        id="clearButton"
+        class="btn"
+        title="Clear All - Click to clear the canvas"
+      >
+        Clear All
+      </button>
       <input type="color" id="colorPicker" value="#000000" />
-      <button id="eraserButton" class="btn">Eraser</button>
-      <button id="penButton" class="btn">Pen</button>
-      <button id="saveButton" class="btn">Save</button>
-      <label id="fileLabel" for="fileInput">Load an image</label>
+      <button
+        id="eraserButton"
+        class="btn"
+        title="Eraser - Click to switch to eraser mode"
+      >
+        Eraser
+      </button>
+      <button
+        id="penButton"
+        class="btn"
+        title="Pen - Click to switch to pen mode"
+      >
+        Pen
+      </button>
+      <button
+        id="saveButton"
+        class="btn"
+        title="Save - Click to save the canvas as an image"
+      >
+        Save
+      </button>
+      <label
+        id="fileLabel"
+        for="fileInput"
+        title="Load Image - Click to load an image onto the canvas"
+        >Load an image</label
+      >
       <input type="file" id="fileInput" accept="image/*" />
-      <button id="undoButton" class="btn">Undo</button>
+      <button
+        id="undoButton"
+        class="btn"
+        title="Undo - Click to undo the last action"
+      >
+        Undo
+      </button>
       <input type="range" id="penSizeRange" min="1" max="20" value="2" />
       <input type="color" id="backgroundColorPicker" value="#ffffff" />
     </div>
