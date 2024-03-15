@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual Board</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      .header p {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .logo-left,
+      .logo-right {
+        width: 100px;
+        height: auto;
+        position: absolute;
+        top: 10px;
+      }
+
+      .logo-left {
+        left: 10px;
+      }
+
+      .logo-right {
+        right: 10px;
+      }
+
+      #board {
+        width: 80%; /* Adjusted width */
+        max-width: 800px; /* Added max-width */
+        height: 60vh; /* Adjusted height */
+        border: 2px solid black;
+        position: relative;
+        margin: 0 auto;
+        margin-top: 5vh; /* Adjusted margin-top */
+      }
+
+      #board canvas {
+        cursor: crosshair;
+        display: block;
+        margin: 0 auto; /* Center canvas horizontally */
+        width: 100%; /* Added width */
+        height: 100%; /* Added height */
+      }
+
+      .btn {
+        margin-top: 10px;
+        margin-right: 10px;
+        padding: 5px 10px;
+        background-color: maroon;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background-color: black;
+      }
+
+      /* Media Queries */
+      @media only screen and (max-width: 768px) {
+        .logo-left,
+        .logo-right {
+          width: 80px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img
+        src="https://findvectorlogo.com/wp-content/uploads/2020/04/university-of-montana-vector-logo.png"
+        alt="University of Montana Logo"
+        class="logo-left"
+      />
+
+      <img
+        src="https://live.staticflickr.com/65535/51262624119_07fb913283_z.jpg"
+        alt="University Logo"
+        class="logo-right"
+      />
+    </div>
+    <div id="board">
+      <canvas id="canvas"></canvas>
+      <button id="clearButton" class="btn">Clear All</button>
+      <input type="color" id="colorPicker" value="#000000" />
+      <button id="eraserButton" class="btn">Eraser</button>
+      <button id="penButton" class="btn">Pen</button>
+      <button id="saveButton" class="btn">Save</button>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const board = document.getElementById("board");
+        const canvas = document.getElementById("canvas");
+        const context = canvas.getContext("2d");
+        const clearButton = document.getElementById("clearButton");
+        const colorPicker = document.getElementById("colorPicker");
+        const eraserButton = document.getElementById("eraserButton");
+        const penButton = document.getElementById("penButton");
+        const saveButton = document.getElementById("saveButton");
+
+        canvas.width = board.offsetWidth;
+        canvas.height = board.offsetHeight;
+        canvas.style.border = "1px solid black";
+
+        let isDrawing = false;
+        let isErasing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function draw(e) {
+          if (!isDrawing) return;
+          const color = isErasing ? "#ffffff" : colorPicker.value;
+          context.strokeStyle = color;
+          context.lineJoin = "round";
+          context.lineCap = "round";
+          context.lineWidth = isErasing ? 20 : 2;
+          context.beginPath();
+          context.moveTo(lastX, lastY);
+          context.lineTo(
+            e.offsetX || e.touches[0].clientX,
+            e.offsetY || e.touches[0].clientY
+          );
+          context.stroke();
+          [lastX, lastY] = [
+            e.offsetX || e.touches[0].clientX,
+            e.offsetY || e.touches[0].clientY,
+          ];
+        }
+
+        canvas.addEventListener("mousedown", (e) => {
+          isDrawing = true;
+          [lastX, lastY] = [e.offsetX, e.offsetY];
+        });
+
+        canvas.addEventListener("touchstart", (e) => {
+          isDrawing = true;
+          [lastX, lastY] = [e.touches[0].clientX, e.touches[0].clientY];
+        });
+
+        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("touchmove", draw);
+
+        canvas.addEventListener("mouseup", () => (isDrawing = false));
+        canvas.addEventListener("touchend", () => (isDrawing = false));
+
+        canvas.addEventListener("mouseout", () => (isDrawing = false));
+
+        clearButton.addEventListener("click", () => {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        eraserButton.addEventListener("click", () => {
+          isErasing = true;
+          eraserButton.classList.add("active");
+          penButton.classList.remove("active");
+        });
+
+        penButton.addEventListener("click", () => {
+          isErasing = false;
+          penButton.classList.add("active");
+          eraserButton.classList.remove("active");
+        });
+
+        saveButton.addEventListener("click", () => {
+          const image = canvas.toDataURL("image/png");
+          const link = document.createElement("a");
+          link.download = "virtual_board.png";
+          link.href = image;
+          link.click();
+        });
+      });
+    </script>
+  </body>
+</html>
