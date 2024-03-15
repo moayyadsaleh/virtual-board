@@ -35,11 +35,11 @@
       #board {
         width: 80%;
         max-width: 800px;
-        height: 70vh; /* Increased height for better drawing experience */
+        height: 70vh;
         border: 2px solid black;
         position: relative;
         margin: 0 auto;
-        margin-top: 10vh; /* Increased margin-top to place the canvas a little down */
+        margin-top: 10vh;
       }
       #board canvas {
         cursor: crosshair;
@@ -89,7 +89,7 @@
         -webkit-appearance: none;
         width: 100%;
         height: 10px;
-        background: #000; /* black background */
+        background: #000;
         outline: none;
         opacity: 0.7;
         -webkit-transition: 0.2s;
@@ -101,19 +101,19 @@
         appearance: none;
         width: 20px;
         height: 20px;
-        background: #800000; /* maroon thumb */
+        background: #800000;
         cursor: pointer;
       }
 
       input[type="range"]::-moz-range-thumb {
         width: 20px;
         height: 20px;
-        background: #800000; /* maroon thumb */
+        background: #800000;
         cursor: pointer;
       }
 
       input[type="range"]::-webkit-slider-thumb:hover {
-        background: #8b0000; /* slightly lighter maroon on hover */
+        background: #8b0000;
       }
 
       input[type="range"]:hover {
@@ -217,7 +217,7 @@
 
         canvas.addEventListener("mousemove", draw);
         canvas.addEventListener("touchmove", (e) => {
-          e.preventDefault(); // Prevent scrolling
+          e.preventDefault();
           draw(e.touches[0]);
         });
 
@@ -253,19 +253,14 @@
         });
 
         saveButton.addEventListener("click", () => {
-          // Save the current canvas state
           const savedBackgroundColor = canvas.style.backgroundColor;
 
-          // Set the background color to the selected color
           canvas.style.backgroundColor = backgroundColorPicker.value;
 
-          // Create an image with the background color
           const imageData = canvas.toDataURL();
 
-          // Restore the previous background color
           canvas.style.backgroundColor = savedBackgroundColor;
 
-          // Create a link to download the image
           const link = document.createElement("a");
           link.download = "virtual_board.png";
           link.href = imageData;
