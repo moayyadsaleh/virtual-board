@@ -4,86 +4,90 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Virtual Board</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="header">
-      <img
-        src="https://findvectorlogo.com/wp-content/uploads/2020/04/university-of-montana-vector-logo.png"
-        alt="University of Montana Logo"
-        class="logo-left"
-      />
-
-      <img
-        src="https://live.staticflickr.com/65535/51262624119_07fb913283_z.jpg"
-        alt="University Logo"
-        class="logo-right"
-      />
-    </div>
-    <div id="board">
+    <div id="board" class="board-container">
       <canvas id="canvas"></canvas>
-      <button
-        id="clearButton"
-        class="btn"
-        title="Clear All - Click to clear the canvas"
-      >
-        Clear All
-      </button>
-      <input type="color" id="colorPicker" value="#000000" />
-      <button
-        id="eraserButton"
-        class="btn"
-        title="Eraser - Click to switch to eraser mode"
-      >
-        Eraser
-      </button>
-      <button
-        id="penButton"
-        class="btn"
-        title="Pen - Click to switch to pen mode"
-      >
-        Pen
-      </button>
-      <button
-        id="saveButton"
-        class="btn"
-        title="Save - Click to save the canvas as an image"
-      >
-        Save
-      </button>
-      <label
-        id="fileLabel"
-        for="fileInput"
-        title="Load Image - Click to load an image onto the canvas"
-        >Load an image</label
-      >
-      <input
-        type="file"
-        id="fileInput"
-        accept="image/*"
-        title="Image Input - Choose an image to load onto the canvas"
-      />
-      <button
-        id="undoButton"
-        class="btn"
-        title="Undo - Click to undo the last action"
-      >
-        Undo
-      </button>
-      <input
-        type="range"
-        id="penSizeRange"
-        min="1"
-        max="20"
-        value="2"
-        title="Pen Size Range - Adjust the size of your pen"
-      />
-      <input
-        type="color"
-        id="backgroundColorPicker"
-        value="#ffffff"
-        title="Background Color Picker - Choose the canvas background color"
-      />
+      <div class="controls">
+        <button
+          id="clearButton"
+          class="btn"
+          title="Clear All - Click to clear the canvas"
+        >
+          <i class="fas fa-trash-alt"></i> Clear All
+        </button>
+        <input
+          type="color"
+          id="colorPicker"
+          class="color-picker"
+          value="#000000"
+          title="Choose Pen Color"
+        />
+        <button
+          id="eraserButton"
+          class="btn"
+          title="Eraser - Click to switch to eraser mode"
+        >
+          <i class="fas fa-eraser"></i> Eraser
+        </button>
+        <button
+          id="penButton"
+          class="btn"
+          title="Pen - Click to switch to pen mode"
+        >
+          <i class="fas fa-pen"></i> Pen
+        </button>
+        <button
+          id="saveButton"
+          class="btn"
+          title="Save - Click to save the canvas as an image"
+        >
+          <i class="fas fa-save"></i> Save
+        </button>
+        <label
+          id="fileLabel"
+          for="fileInput"
+          class="btn file-label"
+          title="Load Image - Click to load an image onto the canvas"
+        >
+          <i class="fas fa-upload"></i> Load Image
+        </label>
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/*"
+          class="hidden-input"
+          title="Choose an image to load onto the canvas"
+        />
+        <button
+          id="undoButton"
+          class="btn"
+          title="Undo - Click to undo the last action"
+        >
+          <i class="fas fa-undo"></i> Undo
+        </button>
+        <input
+          type="range"
+          id="penSizeRange"
+          class="range-input"
+          min="1"
+          max="20"
+          value="2"
+          title="Adjust Pen Size"
+        />
+        <input
+          type="color"
+          id="backgroundColorPicker"
+          class="color-picker"
+          value="#ffffff"
+          title="Choose Canvas Background Color"
+        />
+      </div>
     </div>
     <script src="app.js"></script>
   </body>
